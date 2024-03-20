@@ -1,0 +1,69 @@
+
+services:
+  product-db:
+    image: postgres:16.1
+    restart: always
+    environment:
+      POSTGRES_DB: "product_db"
+      POSTGRES_USER: "product_user"
+      POSTGRES_PASSWORD: "product_password"
+    volumes:
+      - product-db-data:/var/lib/postgresql/data
+
+  category-db:
+    image: postgres:16.1
+    restart: always
+    environment:
+      POSTGRES_DB: "category_db"
+      POSTGRES_USER: "category_user"
+      POSTGRES_PASSWORD: "category_password"
+    volumes:
+      - category-db-data:/var/lib/postgresql/data
+
+  aui-product:
+    image: product-image
+    restart: always
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://product-db:5432/product_db"
+      SPRING_DATASOURCE_DRIVERCLASSNAME: "org.postgresql.Driver"
+      SPRING_DATASOURCE_USERNAME: "product_user"
+      SPRING_DATASOURCE_PASSWORD: "product_password"
+      SPRING_JPA_DATABASE_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"
+
+
+  aui-category:
+    image: category-image
+    restart: always
+    depends_on: 
+      aui-product:
+        condition: service_started
+      category-db:
+        condition: service_started
+    environment:
+      AUI_PRODUCT_URL: "http://aui-product:8080"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://category-db:5432/category_db"
+      SPRING_DATASOURCE_DRIVERCLASSNAME: "org.postgresql.Driver"
+      SPRING_DATASOURCE_USERNAME: "category_user"
+      SPRING_DATASOURCE_PASSWORD: "category_password"
+      SPRING_JPA_DATABASE_PLATFORM: "org.hibernate.dialect.PostgreSQLDialect"
+
+  aui-gateway:
+    image: gateway-image
+    restart: always
+    environment:
+      AUI_PRODUCT_URL: "http://aui-product:8080"
+      AUI_CATEGORY_URL: "http://aui-category:8080"
+      AUI_GATEWAY_HOST: "aui-gateway:8080"
+
+  aui_ng:
+    image: angular-image
+    restart: always
+    environment:
+      API_URL: http://aui-gateway:8080/api
+    ports:
+      - "8087:80"
+
+
+volumes:
+  category-db-data:
+  product-db-data:
