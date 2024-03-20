@@ -1,0 +1,48 @@
+<article *ngIf="category">
+    <header><h2>{{category.name}}</h2></header>
+    <div class="container">
+        <div class="row">
+          <div>
+            <div class="row mb-2">
+              <div>
+                Discount: {{category.discount}}
+              </div>
+            </div>
+
+            <div class="row mb-2">
+              <div>
+                Id: {{category.id}}
+              </div>
+            </div>
+          
+            <div class="row mb-2">
+              <fieldset *ngIf="products">
+                <legend>Products:</legend>
+                <tr *ngFor="let product of products.products">
+  
+                  <td>{{product.name}}</td>
+
+                  <td>
+                    <a [routerLink]="['/categories/'+category.id+'/products', product.id]">View</a>
+                  </td>
+                  <td>
+                    <a [routerLink]="['/categories/'+category.id+'/products', product.id, 'edit']">Edit</a>
+                  </td>
+                  <td>
+                    <button (click)="onDelete(product)">Delete</button>
+                  </td>
+  
+                </tr>
+              </fieldset>
+            </div>
+
+            <div class="row mb-2">
+              <td>
+                <a [routerLink]="['/categories',category.id,'create']">Add new product</a>
+              </td>
+            </div>
+          </div>
+        </div>
+      </div>
+  </article>
+  

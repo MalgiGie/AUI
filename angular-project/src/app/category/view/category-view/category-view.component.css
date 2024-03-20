@@ -1,0 +1,15 @@
+article {
+    color: #7e50be;
+    text-align: center;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: #f0fac2;
+    width: 400px;
+
+  }
+  
+  fieldset {
+    width: auto; 
+    padding: 0.5rem; 
+    margin: 0 auto; 
+  }
+  

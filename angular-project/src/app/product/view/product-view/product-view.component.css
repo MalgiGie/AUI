@@ -1,0 +1,11 @@
+article{
+    background-color: #f0fac2;
+    padding: 20px;
+    width: auto;
+    text-align: center;
+    width: min-content;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid #7e50be;
+  }
